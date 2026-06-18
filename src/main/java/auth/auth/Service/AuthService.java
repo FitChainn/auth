@@ -20,7 +20,7 @@ public class AuthService {
     private final JwtService jwtService;
 
     public AuthResponseDTO login(LoginRequestDTO dto) {
-        log.info("Intento de login para usuario: {}", dto.getUsername());
+        log.info("INTENTO DE LOGIN PARA USUARIO: {}", dto.getUsername());
 
         Usuario usuario = usuarioRepository.findByUsername(dto.getUsername())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -34,7 +34,7 @@ public class AuthService {
         }
 
         String token = jwtService.generarToken(usuario.getUsername(), usuario.getRol().name());
-        log.info("Login exitoso para usuario: {}", dto.getUsername());
+        log.info("LOGIN EXITOSO PARA USUARIO: {}", dto.getUsername());
 
         return new AuthResponseDTO(
                 token,
@@ -46,7 +46,7 @@ public class AuthService {
     }
 
     public AuthResponseDTO register(RegisterRequestDTO dto) {
-        log.info("Registrando nuevo usuario: {}", dto.getUsername());
+        log.info("REGISTRANDO NUEVO USUARIO: {}", dto.getUsername());
 
         if (usuarioRepository.existsByUsername(dto.getUsername())) {
             throw new RuntimeException("El username ya está en uso");
@@ -60,7 +60,7 @@ public class AuthService {
         usuario.setActivo(true);
 
         usuarioRepository.save(usuario);
-        log.info("Usuario registrado: {}", dto.getUsername());
+        log.info("USUARIO REGISTRADO EXITOSAMENTE: {}", dto.getUsername());
 
         String token = jwtService.generarToken(usuario.getUsername(), usuario.getRol().name());
 
