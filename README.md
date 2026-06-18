@@ -6,7 +6,7 @@ Sistema de gestión integral para cadena de gimnasios, desarrollado con arquitec
 
 - Matias Rodriguez
 - Cristofer Cifuentes
-
+- Nicolás Olivares
 ## Repositorio
 
 https://github.com/FitChainn
