@@ -20,7 +20,11 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/v1/auth/login", "/v1/auth/register", "/v1/auth/validar").permitAll()
+                        .requestMatchers(
+                                "/v1/auth/login", "/v1/auth/register", "/v1/auth/validar",
+                                "/swagger-ui/**", "/swagger-ui.html",
+                                "/v3/api-docs/**", "/webjars/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();
