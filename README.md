@@ -7,52 +7,119 @@ Sistema de gestión integral para cadena de gimnasios, desarrollado con arquitec
 - Matias Rodriguez
 - Cristofer Cifuentes
 - Nicolás Olivares
+
 ## Repositorio
 
-https://github.com/FitChainn
+🔗 https://github.com/FitChainn
 
 ---
 
-## Descripción
+## Descripción del Proyecto
 
-FitChain es una plataforma backend distribuida que gestiona todas las operaciones de una cadena de gimnasios: clientes, entrenadores, establecimientos, membresías, pagos, reservas, asistencias, horarios, equipos y notificaciones. El sistema incluye autenticación JWT y un API Gateway centralizado.
+FitChain es una plataforma backend distribuida que gestiona todas las operaciones de una cadena de gimnasios. El sistema implementa una arquitectura de microservicios independientes que se comunican entre sí mediante REST (WebClient), centralizados a través de un API Gateway con autenticación JWT.
 
----
-
-## Microservicios
-
-| Servicio         | Puerto | Base de Datos                  |
-|------------------|--------|-------------------------------|
-| Cliente          | 8081   | db_fitchain_clientes          |
-| Entrenador       | 8082   | db_fitchain_entrenadores      |
-| Equipo           | 8083   | db_fitchain_equipo            |
-| Establecimiento  | 8084   | db_fitchain_establecimiento   |
-| Asistencia       | 8085   | db_fitchain_asistencia        |
-| Horario          | 8086   | db_fitchain_horario           |
-| Reserva          | 8087   | db_fitchain_reserva           |
-| Membresía        | 8088   | db_fitchain_membresia         |
-| Pago             | 8089   | db_fitchain_pago              |
-| Notificación     | 8090   | db_fitchain_notificacion      |
-| Gateway          | 8091   | (sin base de datos)           |
-| Auth             | 8092   | db_fitchain_auth              |
+El dominio abarca: gestión de clientes, entrenadores, establecimientos, equipos, horarios, reservas, membresías, pagos, asistencias y notificaciones.
 
 ---
 
-## Funcionalidades implementadas
+## Microservicios Implementados
 
-- Gestión completa de clientes con asignación a entrenador y establecimiento
-- Gestión de entrenadores con especialidad y establecimiento asignado
-- Control de equipos por establecimiento con resumen por tipo
-- Administración de establecimientos con vista de entrenadores, clientes y equipos
-- Registro de asistencias vinculadas a cliente y horario
-- Gestión de horarios por establecimiento y día de la semana
-- Reservas de actividades con estado (PENDIENTE, CONFIRMADA, CANCELADA)
-- Membresías con tipos MENSUAL, TRIMESTRAL y ANUAL con cálculo automático de fecha fin
-- Registro de pagos por cliente con distintos métodos de pago
-- Envío de notificaciones a clientes por tipo y estado
-- Autenticación con JWT, encriptación BCrypt y roles: ADMIN, ENTRENADOR, CLIENTE
-- API Gateway con filtro JWT para todas las rutas protegidas
-- Comunicación entre microservicios mediante WebClient
+| Servicio | Puerto | Descripción |
+|----------|--------|-------------|
+| Cliente | 8081 | Gestión de clientes del gimnasio |
+| Entrenador | 8082 | Gestión de entrenadores y especialidades |
+| Equipo | 8083 | Control de equipos por establecimiento |
+| Establecimiento | 8084 | Administración de sedes del gimnasio |
+| Asistencia | 8085 | Registro de asistencias a horarios |
+| Horario | 8086 | Gestión de horarios por establecimiento |
+| Reserva | 8087 | Reservas de actividades |
+| Membresía | 8088 | Membresías con cálculo automático de fechas |
+| Pago | 8089 | Registro de pagos por cliente |
+| Notificación | 8090 | Envío de notificaciones a clientes |
+| **Gateway** | **8091** | **API Gateway centralizado con filtro JWT** |
+| Auth | 8092 | Autenticación y generación de tokens JWT |
+
+---
+
+## Rutas Principales del Gateway
+
+Todas las peticiones deben incluir el header:
+```
+Authorization: Bearer <token>
+```
+
+Obtener token: `POST http://44.197.145.9:8091/v1/auth/login`
+
+| Ruta Gateway | Microservicio |
+|-------------|---------------|
+| `/v1/auth/**` | Auth (8092) |
+| `/v1/clientes/**` | Cliente (8081) |
+| `/api/entrenadores/**` | Entrenador (8082) |
+| `/v1/equipos/**` | Equipo (8083) |
+| `/v1/establecimientos/**` | Establecimiento (8084) |
+| `/v1/asistencias/**` | Asistencia (8085) |
+| `/v1/horarios/**` | Horario (8086) |
+| `/v1/reservas/**` | Reserva (8087) |
+| `/v1/membresias/**` | Membresía (8088) |
+| `/v1/pagos/**` | Pago (8089) |
+| `/v1/notificaciones/**` | Notificación (8090) |
+
+---
+
+## Documentación Swagger
+
+| Microservicio | URL Local | URL Remota (AWS) |
+|--------------|-----------|-----------------|
+| Gateway (todos los servicios) | http://localhost:8091/webjars/swagger-ui/index.html | http://44.197.145.9:8091/webjars/swagger-ui/index.html |
+| Cliente | http://localhost:8081/swagger-ui/index.html | http://44.197.145.9:8081/swagger-ui/index.html |
+| Entrenador | http://localhost:8082/swagger-ui/index.html | http://44.197.145.9:8082/swagger-ui/index.html |
+| Equipo | http://localhost:8083/swagger-ui/index.html | http://44.197.145.9:8083/swagger-ui/index.html |
+| Establecimiento | http://localhost:8084/swagger-ui/index.html | http://44.197.145.9:8084/swagger-ui/index.html |
+| Asistencia | http://localhost:8085/swagger-ui/index.html | http://44.197.145.9:8085/swagger-ui/index.html |
+| Horario | http://localhost:8086/swagger-ui/index.html | http://44.197.145.9:8086/swagger-ui/index.html |
+| Reserva | http://localhost:8087/swagger-ui/index.html | http://44.197.145.9:8087/swagger-ui/index.html |
+| Membresía | http://localhost:8088/swagger-ui/index.html | http://44.197.145.9:8088/swagger-ui/index.html |
+| Pago | http://localhost:8089/swagger-ui/index.html | http://44.197.145.9:8089/swagger-ui/index.html |
+| Notificación | http://localhost:8090/swagger-ui/index.html | http://44.197.145.9:8090/swagger-ui/index.html |
+| Auth | http://localhost:8092/swagger-ui/index.html | http://44.197.145.9:8092/swagger-ui/index.html |
+
+---
+
+## Arquitectura
+
+```
+Cliente / Postman
+        │
+        ▼
+API Gateway :8091  ←── Valida JWT con Auth Service :8092
+        │
+        ├── /v1/auth/**             → Auth          :8092
+        ├── /v1/clientes/**         → Cliente        :8081
+        ├── /api/entrenadores/**    → Entrenador     :8082
+        ├── /v1/equipos/**          → Equipo         :8083
+        ├── /v1/establecimientos/** → Establecimiento :8084
+        ├── /v1/asistencias/**      → Asistencia     :8085
+        ├── /v1/horarios/**         → Horario        :8086
+        ├── /v1/reservas/**         → Reserva        :8087
+        ├── /v1/membresias/**       → Membresía      :8088
+        ├── /v1/pagos/**            → Pago           :8089
+        └── /v1/notificaciones/**   → Notificación   :8090
+```
+
+### Comunicación entre microservicios (WebClient)
+
+```
+Entrenador  ──► Cliente  (asignar entrenador)
+Cliente     ──► Entrenador (verificar/obtener entrenador)
+Asistencia  ──► Cliente + Horario
+Reserva     ──► Cliente + Horario
+Membresía   ──► Cliente
+Pago        ──► Cliente
+Notificación ──► Cliente
+Establecimiento ──► Entrenador + Cliente + Equipo
+Horario     ──► Establecimiento
+Gateway     ──► Auth (validar JWT en cada request)
+```
 
 ---
 
@@ -63,45 +130,39 @@ FitChain es una plataforma backend distribuida que gestiona todas las operacione
 - Spring Cloud Gateway
 - Spring Security + JWT (jjwt 0.11.5)
 - Spring Data JPA + Hibernate
-- MySQL (XAMPP)
+- MySQL 8.0
+- Docker + Docker Compose
 - Lombok
 - Bean Validation (JSR 380)
 - WebClient (WebFlux)
+- Springdoc OpenAPI (Swagger UI)
+- JUnit 5 + Mockito (pruebas unitarias)
+- GitHub Actions (CI/CD)
 
 ---
 
-## Requisitos previos
+## Ejecución Local
 
+### Requisitos previos
 - Java 21
 - Maven 3.9+
-- XAMPP con MySQL activo
+- XAMPP con MySQL activo (puerto 3306)
 - IntelliJ IDEA (recomendado)
 
----
-
-## Pasos para ejecutar
-
-### 1. Crear las bases de datos en MySQL
-
-Ejecutar en phpMyAdmin o consola MySQL:
+### 1. Crear la base de datos
 
 ```sql
-CREATE DATABASE db_fitchain_clientes;
-CREATE DATABASE db_fitchain_entrenadores;
-CREATE DATABASE db_fitchain_equipo;
-CREATE DATABASE db_fitchain_establecimiento;
-CREATE DATABASE db_fitchain_asistencia;
-CREATE DATABASE db_fitchain_horario;
-CREATE DATABASE db_fitchain_reserva;
-CREATE DATABASE db_fitchain_membresia;
-CREATE DATABASE db_fitchain_pago;
-CREATE DATABASE db_fitchain_notificacion;
-CREATE DATABASE db_fitchain_auth;
+CREATE DATABASE db_fitchain;
 ```
 
-### 2. Iniciar los microservicios
+### 2. Configurar contraseña MySQL (si aplica)
 
-Abrir cada proyecto en IntelliJ y ejecutar en este orden:
+En cada `application.properties`, ajustar:
+```properties
+spring.datasource.password=tu_contraseña
+```
+
+### 3. Orden de inicio recomendado
 
 ```
 1. Auth          (puerto 8092)
@@ -118,16 +179,63 @@ Abrir cada proyecto en IntelliJ y ejecutar en este orden:
 12. Gateway      (puerto 8091)
 ```
 
-O por terminal en la carpeta de cada microservicio:
-
+Por terminal en cada carpeta del microservicio:
 ```bash
 ./mvnw spring-boot:run
 ```
 
-### 3. Obtener token de acceso
+---
 
+## Despliegue Remoto (AWS con Docker)
+
+El sistema está desplegado en una instancia EC2 de AWS usando Docker Compose.
+
+**IP del servidor:** `44.197.145.9`
+
+### Docker Compose (todos los servicios)
+
+```bash
+# Levantar todos los servicios
+docker compose up -d
+
+# Levantar un servicio específico
+docker compose up -d --build <nombre_servicio>
+
+# Ver estado de los contenedores
+docker ps
+
+# Ver logs de un servicio
+docker logs <nombre_contenedor> -f
 ```
-POST http://localhost:8091/v1/auth/login
+
+### CI/CD con GitHub Actions
+
+Cada microservicio tiene su propio workflow en `.github/workflows/main.yml` que:
+1. Sincroniza el código al servidor AWS via rsync
+2. Reconstruye y reinicia el contenedor correspondiente
+
+**Secrets requeridos por repositorio:**
+```
+IP_SERVER   → 44.197.145.9
+USERNAME    → ubuntu
+KEY         → (clave SSH privada .pem)
+PORT        → 22
+```
+
+---
+
+## Usuarios de Prueba
+
+| Username | Password | Rol |
+|----------|----------|-----|
+| admin | admin123 | ADMIN |
+| entrenador1 | entrenador123 | ENTRENADOR |
+| cliente1 | cliente123 | CLIENTE |
+
+### Obtener token
+
+```bash
+POST http://44.197.145.9:8091/v1/auth/login
 Content-Type: application/json
 
 {
@@ -136,350 +244,56 @@ Content-Type: application/json
 }
 ```
 
-Usuarios disponibles por defecto:
-
-| Username     | Password        | Rol        |
-|--------------|-----------------|------------|
-| admin        | admin123        | ADMIN      |
-| entrenador1  | entrenador123   | ENTRENADOR |
-| cliente1     | cliente123      | CLIENTE    |
-
-### 4. Usar el token en las peticiones
-
-Agregar en el header de cada request:
+### Usar el token
 
 ```
 Authorization: Bearer <token_obtenido>
 ```
 
 ---
-## Arquitectura
 
-```
-Cliente/Postman
-      │
-      ▼
-API Gateway (8091)  ←── Valida JWT con Auth Service
-      │
-      ├── /v1/clientes/**        → Cliente (8081)
-      ├── /v1/entrenadores/**   → Entrenador (8082)
-      ├── /v1/equipos/**         → Equipo (8083)
-      ├── /v1/establecimientos/**→ Establecimiento (8084)
-      ├── /v1/asistencias/**     → Asistencia (8085)
-      ├── /v1/horarios/**        → Horario (8086)
-      ├── /v1/reservas/**        → Reserva (8087)
-      ├── /v1/membresias/**      → Membresía (8088)
-      ├── /v1/pagos/**           → Pago (8089)
-      ├── /v1/notificaciones/**  → Notificación (8090)
-      └── /v1/auth/**            → Auth (8092)
-# FitChain - Referencia de Endpoints
+## Pruebas Unitarias
 
-Todos los requests deben incluir el header:
-```
-Authorization: Bearer <token>
-```
+Cada microservicio cuenta con pruebas unitarias en `src/test/java` que cubren:
+- **Controller tests** — con MockMvc y Mockito
+- **Service tests** — con Mockito para simular repositorios y WebClients
+- **Repository tests** — con @DataJpaTest y H2 en memoria
 
-Obtener token: `POST http://localhost:8091/v1/auth/login`
+Para ejecutar las pruebas de un microservicio:
+
+```bash
+./mvnw test
+```
 
 ---
 
-## CLIENTE (8081) → Gateway: /v1/clientes/**
+## Endpoints Principales
 
+### Auth
+```
+POST /v1/auth/login      → Obtener token JWT
+POST /v1/auth/register   → Registrar usuario
+GET  /v1/auth/validar    → Validar token (usado por Gateway)
+```
+
+### Cliente
 ```
 GET    /v1/clientes
 GET    /v1/clientes/{id}
 POST   /v1/clientes
 DELETE /v1/clientes/{id}
-PUT    /v1/clientes/{clienteId}/entrenador/{entrenadorId}
 GET    /v1/clientes/entrenador/{entrenadorId}
-GET    /v1/clientes/entrenador/{entrenadorId}/simple
 GET    /v1/clientes/establecimiento/{establecimientoId}
 ```
 
-### Crear cliente
-```json
-POST /v1/clientes
-{
-  "nombre": "Juan Pérez",
-  "run": "12345678-k",
-  "fechaNacimiento": "1990-12-15",
-  "entrenadorId": 1,
-  "establecimientoId": 1
-}
-```
-
----
-
-## ENTRENADOR (8082) → Gateway: /api/entrenadores/**
-
+### Entrenador
 ```
 GET    /api/entrenadores
 GET    /api/entrenadores/{id}
-GET    /api/entrenadores/{id}/simple
 POST   /api/entrenadores
 DELETE /api/entrenadores/{id}
+PUT    /api/entrenadores/{entrenadorId}/cliente/{clienteId}
 GET    /api/entrenadores/establecimiento/{establecimientoId}
-PUT    /api/entrenadores/{entrenadorId}/establecimiento/{establecimientoId}
 ```
 
-### Crear entrenador
-```json
-POST /api/entrenadores
-{
-  "run": "19482021-0",
-  "nombre": "Guillermo Salas",
-  "especialidad": "Crossfit",
-  "fechaNacimiento": "1980-12-10",
-  "establecimientoId": 1
-}
-```
-
----
-
-## EQUIPO (8083) → Gateway: /v1/equipos/**
-
-```
-GET    /v1/equipos
-GET    /v1/equipos/{id}
-POST   /v1/equipos
-PUT    /v1/equipos/{id}
-DELETE /v1/equipos/{id}
-GET    /v1/equipos/establecimiento/{establecimientoId}
-GET    /v1/equipos/establecimiento/{establecimientoId}/total
-GET    /v1/equipos/establecimiento/{establecimientoId}/resumen
-```
-
-### Crear equipo
-```json
-POST /v1/equipos
-{
-  "tipoMaquina": "Cinta de Correr",
-  "marca": "Life Fitness",
-  "fechaCompra": "2022-03-15",
-  "estado": "Operativo",
-  "establecimientoId": 1
-}
-```
-
----
-
-## ESTABLECIMIENTO (8084) → Gateway: /v1/establecimientos/**
-
-```
-GET    /v1/establecimientos
-GET    /v1/establecimientos/{id}
-POST   /v1/establecimientos
-DELETE /v1/establecimientos/{id}
-GET    /v1/establecimientos/{id}/entrenadores
-GET    /v1/establecimientos/{id}/clientes
-```
-
-### Crear establecimiento
-```json
-POST /v1/establecimientos
-{
-  "nombre": "FitChain Santiago",
-  "direccion": "Av. Providencia 1234, Santiago"
-}
-```
-
----
-
-## ASISTENCIA (8085) → Gateway: /v1/asistencias/**
-
-```
-GET    /v1/asistencias
-GET    /v1/asistencias/{id}
-POST   /v1/asistencias
-DELETE /v1/asistencias/{id}
-GET    /v1/asistencias/cliente/{clienteId}
-GET    /v1/asistencias/horario/{horarioId}
-```
-
-### Registrar asistencia
-```json
-POST /v1/asistencias
-{
-  "clienteId": 1,
-  "horarioId": 1,
-  "fecha": "2026-05-20"
-}
-```
-
----
-
-## HORARIO (8086) → Gateway: /v1/horarios/**
-
-```
-GET    /v1/horarios
-GET    /v1/horarios/{id}
-POST   /v1/horarios
-PUT    /v1/horarios/{id}
-DELETE /v1/horarios/{id}
-GET    /v1/horarios/establecimiento/{establecimientoId}
-GET    /v1/horarios/establecimiento/{establecimientoId}/dia/{diaSemana}
-GET    /v1/horarios/dia/{diaSemana}
-```
-
-### Crear horario
-```json
-POST /v1/horarios
-{
-  "establecimientoId": 1,
-  "diaSemana": "LUNES",
-  "horaApertura": "07:00:00",
-  "horaCierre": "21:00:00",
-  "abierto": true
-}
-```
-
----
-
-## RESERVA (8087) → Gateway: /v1/reservas/**
-
-```
-GET    /v1/reservas
-GET    /v1/reservas/{id}
-POST   /v1/reservas
-PUT    /v1/reservas/{id}
-DELETE /v1/reservas/{id}
-GET    /v1/reservas/cliente/{clienteId}
-GET    /v1/reservas/estado/{estado}
-```
-
-### Crear reserva
-```json
-POST /v1/reservas
-{
-  "clienteId": 1,
-  "horarioId": 1,
-  "actividad": "SPINNING",
-  "fecha": "2026-05-21",
-  "hora": "10:00:00"
-}
-```
-
-### Estados válidos
-```
-PENDIENTE | CONFIRMADA | CANCELADA
-```
-
----
-
-## MEMBRESÍA (8088) → Gateway: /v1/membresias/**
-
-```
-GET    /v1/membresias
-GET    /v1/membresias/{id}
-POST   /v1/membresias
-PUT    /v1/membresias/{id}
-DELETE /v1/membresias/{id}
-GET    /v1/membresias/cliente/{clienteId}
-GET    /v1/membresias/estado/{estado}
-```
-
-### Crear membresía
-```json
-POST /v1/membresias
-{
-  "clienteId": 1,
-  "tipo": "MENSUAL",
-  "fechaInicio": "2026-05-20",
-  "precio": 25000
-}
-```
-
-### Tipos válidos
-```
-MENSUAL | TRIMESTRAL | ANUAL
-```
-
-### Estados válidos
-```
-ACTIVA | VENCIDA | CANCELADA
-```
-
----
-
-## PAGO (8089) → Gateway: /v1/pagos/**
-
-```
-GET    /v1/pagos
-GET    /v1/pagos/{id}
-POST   /v1/pagos
-PUT    /v1/pagos/{id}
-DELETE /v1/pagos/{id}
-GET    /v1/pagos/cliente/{clienteId}
-GET    /v1/pagos/estado/{estado}
-```
-
-### Crear pago
-```json
-POST /v1/pagos
-{
-  "clienteId": 1,
-  "montoPagar": 25000,
-  "metodoPago": "EFECTIVO",
-  "fechaPago": "2026-05-20"
-}
-```
-
-### Métodos de pago válidos
-```
-EFECTIVO | TARJETA | TRANSFERENCIA
-```
-
-### Estados válidos
-```
-PENDIENTE | PAGADO | CANCELADO
-```
-
----
-
-## NOTIFICACIÓN (8090) → Gateway: /v1/notificaciones/**
-
-```
-GET    /v1/notificaciones
-GET    /v1/notificaciones/{id}
-POST   /v1/notificaciones
-PUT    /v1/notificaciones/{id}
-DELETE /v1/notificaciones/{id}
-GET    /v1/notificaciones/cliente/{clienteId}
-GET    /v1/notificaciones/estado/{estado}
-```
-
-### Crear notificación
-```json
-POST /v1/notificaciones
-{
-  "clienteId": 1,
-  "tipo": "VENCIMIENTO_MEMBRESIA",
-  "mensaje": "Tu membresía vence en 3 días",
-  "fechaEnvio": "2026-05-20"
-}
-```
-
-### Tipos de notificación
-```
-VENCIMIENTO_MEMBRESIA | CONFIRMACION_PAGO | RECORDATORIO_RESERVA
-```
-
-### Estados válidos
-```
-PENDIENTE | ENVIADA
-```
-
----
-
-## Usuarios de prueba
-
-| Username     | Password        | Rol        |
-|--------------|-----------------|------------|
-| admin        | admin123        | ADMIN      |
-| entrenador1  | entrenador123   | ENTRENADOR |
-| cliente1     | cliente123      | CLIENTE    |
-
-
-
-
-
+> Ver documentación Swagger para el listado completo de endpoints de cada microservicio.
